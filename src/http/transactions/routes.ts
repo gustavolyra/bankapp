@@ -6,7 +6,6 @@ import { reset } from "./reset";
 export async function transactionsRoutes(app: FastifyInstance) {
   app.post('/event', event)
   app.post('/reset', reset)
-  app.get('/health', event)
   //app.get('/balance:account_id', balance)
 
 }

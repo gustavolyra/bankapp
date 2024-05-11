@@ -14,8 +14,13 @@ export class PrismaAccountRepository implements AccountRepository {
     return account
   }
 
-  getAccount(account_id: string): Promise<{ id: string; balance: number; } | null> {
-    throw new Error("Method not implemented.");
+  async getAccount(account_id: string): Promise<{ id: string; balance: number; } | null> {
+    const account = await prisma.account.findUnique({
+      where: {
+        id: account_id
+      }
+    })
+    return account
   }
 
   async doesAccountExist(account_id: string): Promise<boolean> {
@@ -42,10 +47,25 @@ export class PrismaAccountRepository implements AccountRepository {
     return account
   }
 
-  withdraw(data: withdrawRequest): Promise<{ id: string; balance: number; }> {
-    throw new Error("Method not implemented.");
+  async withdraw({ account_id, amount }: withdrawRequest): Promise<{ id: string; balance: number; }> {
+    const account = await prisma.account.update({
+      where: {
+        id: account_id
+      },
+      data: {
+        balance: {
+          decrement: amount
+        }
+      }
+    })
+    return account
   }
-  transfer(data: transferRequest): Promise<transferReply | null> {
-    throw new Error("Method not implemented.");
+
+  //TODO refactor
+  async transfer({ account_id_origin, account_id_destination, amount }: transferRequest): Promise<transferReply | null> {
+    const accountOrigin = await this.withdraw({ account_id: account_id_origin, amount })
+    const accountDestination = await this.withdraw({ account_id: account_id_destination, amount })
+
+    return { origin: accountOrigin, destination: accountDestination }
   }
 }

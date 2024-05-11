@@ -9,21 +9,21 @@ interface withdrawUseCaseRequest {
 }
 
 interface withdrawUseCaseReply {
-  origin: account
+  account: account
 }
 
 export class WithdrawUseCase {
   constructor(private accountRepository: AccountRepository) {}
 
   async execute({ account_id, amount }: withdrawUseCaseRequest): Promise<withdrawUseCaseReply> {
-    const account = await this.accountRepository.getAccount(account_id)
+    const accountOrigin = await this.accountRepository.getAccount(account_id)
 
-    if (!account) throw new AccountNotFoundError()
+    if (!accountOrigin) throw new AccountNotFoundError()
 
-    if (account.balance < amount) throw new InsufficientFundsError()
+    if (accountOrigin.balance < amount) throw new InsufficientFundsError()
 
-    const origin = await this.accountRepository.withdraw({ account_id, amount })
+    const account = await this.accountRepository.withdraw({ account_id, amount })
 
-    return { origin }
+    return { account }
   }
 }

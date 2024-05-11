@@ -47,13 +47,13 @@ describe('Make a Withdraw', () => {
       const withdrawAmount = 50
 
       const newAccount = await accountRepository.create({ id: account_id, balance })
-      const { origin } = await sut.execute({
+      const { account } = await sut.execute({
         account_id,
         amount: withdrawAmount
       })
 
-      expect(origin.id).toEqual(account_id)
-      expect(origin.balance).toEqual(balance - withdrawAmount)
+      expect(account.id).toEqual(account_id)
+      expect(account.balance).toEqual(balance - withdrawAmount)
     })
   })
 })
