@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run --dir src/use-cases",
+    "test:watch": "vitest --dir src/use-cases"
   },
   "keywords": [],
   "author": "",
@@ -11,14 +12,18 @@
   "description": "",
   "devDependencies": {
     "@types/node": "^20.12.11",
+    "@vitest/ui": "^1.6.0",
     "prisma": "^5.13.0",
     "tsup": "^8.0.2",
     "tsx": "^4.9.3",
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "vite-tsconfig-paths": "^4.3.2",
+    "vitest": "^1.6.0"
   },
   "dependencies": {
     "@prisma/client": "^5.13.0",
     "dotenv": "^16.4.5",
-    "fastify": "^4.27.0"
+    "fastify": "^4.27.0",
+    "zod": "^3.23.8"
   }
 }
