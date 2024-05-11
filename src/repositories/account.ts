@@ -9,9 +9,19 @@ export interface withdrawRequest {
   amount: number
 }
 export interface transferRequest {
-  account_id_original: number
+  account_id_origin: number
   account_id_destination: number
   amount: number
+}
+export interface transferReply {
+  origin: {
+    id: number
+    balance: number
+  }
+  destination: {
+    id: number
+    balance: number
+  }
 }
 
 export interface AccountRepository {
@@ -20,5 +30,5 @@ export interface AccountRepository {
   doesAccountExist(account_id: number): Promise<boolean>
   deposit(data: depositRequest): Promise<account>
   withdraw(data: withdrawRequest): Promise<account>
-  transfer(data: transferRequest): Promise<account>
+  transfer(data: transferRequest): Promise<transferReply | null>
 }

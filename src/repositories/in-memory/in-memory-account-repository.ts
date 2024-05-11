@@ -7,7 +7,7 @@ export class InMemoryAccountRepository implements AccountRepository {
   public items: account[] = []
 
   async doesAccountExist(account_id: number): Promise<boolean> {
-    const account = this.items.find((item) => item.id = account_id)
+    const account = this.items.find((item) => item.id === account_id)
 
     if (!account) return false
     return true
@@ -24,7 +24,7 @@ export class InMemoryAccountRepository implements AccountRepository {
   }
 
   async getAccount(account_id: number) {
-    const account = this.items.find((item) => item.id = account_id)
+    const account = this.items.find((item) => item.id === account_id)
 
     if (!account) return null
     return account
@@ -49,7 +49,30 @@ export class InMemoryAccountRepository implements AccountRepository {
     return this.items[accountIndex]
   }
 
-  transfer(data: transferRequest): Promise<{ id: number; balance: number; }> {
-    throw new Error("Method not implemented.");
+  //TODO Improve
+  async transfer({ account_id_destination, account_id_origin, amount }: transferRequest) {
+    const accountOriginIndex = this.items.findIndex((item) => item.id === account_id_origin)
+    const accountDestinationIndex = this.items.findIndex((item) => item.id === account_id_destination)
+
+    if (accountDestinationIndex >= 0 && accountOriginIndex >= 0) {
+      const accountOriginBalance = this.items[accountOriginIndex].balance
+      const accountDestinationBalance = this.items[accountOriginIndex].balance
+      if (accountOriginBalance >= amount) {
+        this.items[accountOriginIndex].balance = accountOriginBalance - amount
+        this.items[accountDestinationIndex].balance = accountDestinationBalance - amount
+
+        return {
+          origin: {
+            id: account_id_origin,
+            balance: this.items[accountOriginIndex].balance
+          },
+          destination: {
+            id: account_id_destination,
+            balance: this.items[accountDestinationIndex].balance
+          }
+        }
+      }
+    }
+    return null
   }
 }
