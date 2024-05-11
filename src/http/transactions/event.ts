@@ -7,14 +7,14 @@ import { z } from "zod";
 
 export async function event(request: FastifyRequest, reply: FastifyReply) {
 
-  const eventSchema = z.object({
+  const eventSchemaBody = z.object({
     type: z.string(),
     destination: z.string().optional(),
     origin: z.string().optional(),
     amount: z.number()
   })
 
-  const { type, amount, destination, origin } = eventSchema.parse(request.body)
+  const { type, amount, destination, origin } = eventSchemaBody.parse(request.body)
   console.log(type)
   switch (type) {
     case "deposit":
