@@ -1,3 +1,5 @@
+import { AccountNotFoundError } from "@/use-cases/errors/account-not-found-error";
+import { InsufficientFundsError } from "@/use-cases/errors/insufficient-funds-error";
 import { makeDepositUseCase } from "@/use-cases/factories/make-deposit-use-case";
 import { makeTransferUseCase } from "@/use-cases/factories/make-transfer-use-case";
 import { makeWithdrawUseCase } from "@/use-cases/factories/make-withdraw-use-case";
@@ -46,8 +48,16 @@ async function handleDeposit(reply: FastifyReply, destination: string, amount: n
 
 async function handleWithdraw(reply: FastifyReply, origin: string, amount: number) {
   const withdrawUseCase = makeWithdrawUseCase()
-  const { account: withdrawAccount } = await withdrawUseCase.execute({ account_id: origin, amount })
-  return reply.status(201).send({ origin: withdrawAccount })
+  try {
+    const { account: withdrawAccount } = await withdrawUseCase.execute({ account_id: origin, amount })
+    return reply.status(201).send({ origin: withdrawAccount })
+  } catch (err) {
+    if (err instanceof (AccountNotFoundError))
+      return reply.status(404).send(0)
+    if (err instanceof (InsufficientFundsError)) {
+      return reply.status(402).send()
+    }
+  }
 }
 
 async function handleTransfer(reply: FastifyReply, origin: string, destination: string, amount: number) {
