@@ -15,7 +15,7 @@ describe('Make a Deposit', () => {
     })
 
     it('should be able to create an account when make a deposit', async () => {
-      const account_id = 1
+      const account_id = "1"
       const balance = 100
       const { account } = await sut.execute({
         account_id,
@@ -27,7 +27,7 @@ describe('Make a Deposit', () => {
     })
 
     it('should be able to make a deposit in an account that already exists', async () => {
-      const account_id = 1
+      const account_id = "1"
       const balance = 100
       const depositAmount = 200
 

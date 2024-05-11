@@ -17,8 +17,8 @@ describe('Make a Transfer between to accounts', () => {
     })
 
     it('should not be able to transfer from a not exists accounts', async () => {
-      const account_id_origin = 1
-      const account_id_destination = 2
+      const account_id_origin = "1"
+      const account_id_destination = "2"
       const amount = 100
       await expect(() =>
         sut.execute({
@@ -30,8 +30,8 @@ describe('Make a Transfer between to accounts', () => {
     })
 
     it('should not be able to transfer to a not exist account', async () => {
-      const account_id_origin = 3
-      const account_id_destination = 4
+      const account_id_origin = "1"
+      const account_id_destination = "2"
       const amount = 100
 
       await accountRepository.create({ id: account_id_origin, balance: amount })
@@ -46,8 +46,8 @@ describe('Make a Transfer between to accounts', () => {
     })
 
     it('should not be able to transfer from a not exist account', async () => {
-      const account_id_origin = 1
-      const account_id_destination = 2
+      const account_id_origin = "1"
+      const account_id_destination = "2"
       const amount = 100
       await accountRepository.create({ id: account_id_destination, balance: amount })
       await expect(() =>
@@ -60,8 +60,8 @@ describe('Make a Transfer between to accounts', () => {
     })
 
     it('should not be able to transfer when orign account has insufficient funds', async () => {
-      const account_id_origin = 1
-      const account_id_destination = 2
+      const account_id_origin = "1"
+      const account_id_destination = "2"
       const amount = 100
 
       await accountRepository.create({ id: account_id_origin, balance: 1 })
@@ -76,8 +76,8 @@ describe('Make a Transfer between to accounts', () => {
     })
 
     it('should be able to transfer money between accounts', async () => {
-      const account_id_origin = 1
-      const account_id_destination = 2
+      const account_id_origin = "1"
+      const account_id_destination = "2"
       const amount = 100
 
       await accountRepository.create({ id: account_id_origin, balance: amount })

@@ -5,18 +5,18 @@ import { InsufficientFundsError } from "./errors/insufficient-funds-error"
 import { promises } from "dns"
 
 interface transferUseCaseRequest {
-  account_id_origin: number
-  account_id_destination: number
+  account_id_origin: string
+  account_id_destination: string
   amount: number
 }
 
 interface transferUseCaseReply {
   origin: {
-    id: number
+    id: string
     balance: number
   }
   destination: {
-    id: number
+    id: string
     balance: number
   }
 }
@@ -37,7 +37,7 @@ export class TransferUseCase {
     return transfer
   }
 
-  private async doesBothAccountExists(account_id_origin: number, account_id_destination: number): Promise<Boolean> {
+  private async doesBothAccountExists(account_id_origin: string, account_id_destination: string): Promise<Boolean> {
     const accountOriginExist = await this.accountRepository.doesAccountExist(account_id_origin)
     const accountDestinationExist = await this.accountRepository.doesAccountExist(account_id_destination)
 
@@ -47,7 +47,7 @@ export class TransferUseCase {
     return true
   }
 
-  private async doesAccountOriginHasFunds(account_id_origin: number, amount: number): Promise<Boolean> {
+  private async doesAccountOriginHasFunds(account_id_origin: string, amount: number): Promise<Boolean> {
     const accountOrigin = await this.accountRepository.getAccount(account_id_origin)
     if (!accountOrigin) return false
     if (accountOrigin.balance < amount) return false

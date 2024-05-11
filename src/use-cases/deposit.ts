@@ -2,7 +2,7 @@ import { AccountRepository } from "@/repositories/account"
 import { account } from "@prisma/client"
 
 interface depositUseCaseRequest {
-  account_id: number
+  account_id: string
   amount: number
 }
 

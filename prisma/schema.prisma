@@ -14,6 +14,6 @@ datasource db {
 }
 
 model account {
-  id      Int @id @default(autoincrement())
-  balance Int @default(0)
+  id      String @id
+  balance Int    @default(0)
 }

@@ -2,7 +2,7 @@ import { AccountRepository } from "@/repositories/account"
 import { AccountNotFoundError } from "./errors/account-not-found-error"
 
 interface getBalanceUseCaseRequest {
-  account_id: number
+  account_id: string
 }
 
 interface getBalanceUseCaseReply {

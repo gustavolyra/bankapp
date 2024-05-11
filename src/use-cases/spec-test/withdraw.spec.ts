@@ -17,7 +17,7 @@ describe('Make a Withdraw', () => {
     })
 
     it('should not be able to withdraw from a not exists account', async () => {
-      const account_id = 1
+      const account_id = "2"
       const balance = 100
       await expect(() =>
         sut.execute({
@@ -27,7 +27,7 @@ describe('Make a Withdraw', () => {
       ).rejects.toBeInstanceOf(AccountNotFoundError)
     })
     it('should not be able to withdraw from an account with less balance than the amount', async () => {
-      const account_id = 1
+      const account_id = "2"
       const balance = 100
       const withdrawAmount = 200
 
@@ -42,7 +42,7 @@ describe('Make a Withdraw', () => {
     })
 
     it('should be able to withdraw money from an existing  account', async () => {
-      const account_id = 1
+      const account_id = "2"
       const balance = 100
       const withdrawAmount = 50
 

@@ -3,27 +3,45 @@ import { AccountRepository, depositRequest, transferRequest, withdrawRequest } f
 import { randomInt } from "crypto";
 
 export class InMemoryAccountRepository implements AccountRepository {
-
   public items: account[] = []
 
-  async doesAccountExist(account_id: number): Promise<boolean> {
-    const account = this.items.find((item) => item.id === account_id)
-
-    if (!account) return false
-    return true
+  async reset() {
+    this.items = []
   }
-  async create(data: Prisma.accountUncheckedCreateInput) {
-    const account = {
-      id: data.id ?? randomInt(100),
-      balance: data.balance
-    }
 
+  async create(data: Prisma.accountCreateInput) {
+    const { id, balance } = data
+    const account = {
+      id,
+      balance: balance ?? 0
+    }
     this.items.push(account)
 
     return account
   }
 
-  async getAccount(account_id: number) {
+
+  // async create(data: Prisma.accountCreateInput) {
+  //   const account = {
+  //     id: data.id ?? randomInt(100).toString(),
+  //     balance: data.balance
+  //   }
+
+  //   this.items.push(account)
+
+  //   return account
+  // }
+
+
+  async doesAccountExist(account_id: string): Promise<boolean> {
+    const account = this.items.find((item) => item.id === account_id)
+
+    if (!account) return false
+    return true
+  }
+
+
+  async getAccount(account_id: string) {
     const account = this.items.find((item) => item.id === account_id)
 
     if (!account) return null

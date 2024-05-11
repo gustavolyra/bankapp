@@ -4,7 +4,7 @@ import { AccountNotFoundError } from "./errors/account-not-found-error"
 import { InsufficientFundsError } from "./errors/insufficient-funds-error"
 
 interface withdrawUseCaseRequest {
-  account_id: number
+  account_id: string
   amount: number
 }
 

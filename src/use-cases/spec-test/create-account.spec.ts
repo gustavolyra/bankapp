@@ -17,10 +17,11 @@ describe('Create an Account', () => {
 
     it('should be able to register a new account', async () => {
       const { account } = await sut.execute({
+        account_id: '100',
         amount: 100
       })
 
-      expect(account.id).toEqual(expect.any(Number))
+      expect(account.id).toEqual(expect.any(String))
     })
   })
 })

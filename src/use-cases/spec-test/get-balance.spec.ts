@@ -17,7 +17,7 @@ describe('Check account balance', () => {
     })
 
     it('should be able to check account balance', async () => {
-      const newAccount = await accountRepository.create({ balance: 100 })
+      const newAccount = await accountRepository.create({ id: '1', balance: 100 })
       const { balance } = await sut.execute({
         account_id: newAccount.id
       })
@@ -28,7 +28,7 @@ describe('Check account balance', () => {
     it('should not be able to check balance for non-existing account', async () => {
       await expect(() =>
         sut.execute({
-          account_id: randomInt(100)
+          account_id: randomInt(100).toString()
         }),
       ).rejects.toBeInstanceOf(AccountNotFoundError)
     })

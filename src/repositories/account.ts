@@ -1,33 +1,34 @@
 import { Prisma, account } from '@prisma/client'
 
 export interface depositRequest {
-  account_id: number
+  account_id: string
   amount: number
 }
 export interface withdrawRequest {
-  account_id: number
+  account_id: string
   amount: number
 }
 export interface transferRequest {
-  account_id_origin: number
-  account_id_destination: number
+  account_id_origin: string
+  account_id_destination: string
   amount: number
 }
 export interface transferReply {
   origin: {
-    id: number
+    id: string
     balance: number
   }
   destination: {
-    id: number
+    id: string
     balance: number
   }
 }
 
 export interface AccountRepository {
-  create(data: Prisma.accountUncheckedCreateInput): Promise<account>
-  getAccount(account_id: number): Promise<account | null>
-  doesAccountExist(account_id: number): Promise<boolean>
+  reset(): void
+  create(data: Prisma.accountCreateInput): Promise<account>
+  getAccount(account_id: string): Promise<account | null>
+  doesAccountExist(account_id: string): Promise<boolean>
   deposit(data: depositRequest): Promise<account>
   withdraw(data: withdrawRequest): Promise<account>
   transfer(data: transferRequest): Promise<transferReply | null>
