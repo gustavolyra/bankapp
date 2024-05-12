@@ -55,14 +55,22 @@ async function handleWithdraw(reply: FastifyReply, origin: string, amount: numbe
     if (err instanceof (AccountNotFoundError))
       return reply.status(404).send(0)
     if (err instanceof (InsufficientFundsError)) {
-      return reply.status(402).send()
+      return reply.status(402).send(err.balance)
     }
   }
 }
 
 async function handleTransfer(reply: FastifyReply, origin: string, destination: string, amount: number) {
   const transferUseCase = makeTransferUseCase()
-  const transferInformation = await transferUseCase.execute({ account_id_origin: origin, account_id_destination: destination, amount })
-  return reply.status(201).send(transferInformation)
+  try {
+    const transferInformation = await transferUseCase.execute({ account_id_origin: origin, account_id_destination: destination, amount })
+    return reply.status(201).send(transferInformation)
+  } catch (err) {
+    if (err instanceof (AccountNotFoundError))
+      return reply.status(404).send(0)
+    if (err instanceof (InsufficientFundsError)) {
+      return reply.status(402).send(err.balance)
+    }
+  }
 }
 

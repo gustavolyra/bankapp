@@ -29,8 +29,10 @@ export class TransferUseCase {
     const doesBothAccountExists = await this.doesBothAccountExists(account_id_origin, account_id_destination)
     if (!doesBothAccountExists) throw new AccountNotFoundError()
 
-    const doesAccountOriginHasFunds = await this.doesAccountOriginHasFunds(account_id_origin, amount)
-    if (!doesAccountOriginHasFunds) throw new InsufficientFundsError()
+    const accountOriginBalance = await this.accountOriginBalance(account_id_origin, amount)
+    if (accountOriginBalance < amount) {
+      throw new InsufficientFundsError(accountOriginBalance)
+    }
 
     const transfer = await this.accountRepository.transfer({ account_id_origin, account_id_destination, amount })
 
@@ -47,10 +49,9 @@ export class TransferUseCase {
     return true
   }
 
-  private async doesAccountOriginHasFunds(account_id_origin: string, amount: number): Promise<Boolean> {
+  private async accountOriginBalance(account_id_origin: string, amount: number): Promise<number> {
     const accountOrigin = await this.accountRepository.getAccount(account_id_origin)
-    if (!accountOrigin) return false
-    if (accountOrigin.balance < amount) return false
-    return true
+    if (!accountOrigin) return 0
+    return accountOrigin.balance
   }
 }

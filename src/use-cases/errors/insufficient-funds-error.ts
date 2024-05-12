@@ -1,5 +1,8 @@
 export class InsufficientFundsError extends Error {
-  constructor() {
+  balance: number
+
+  constructor(balance: number) {
     super('Insufficient Funds Error!')
+    this.balance = balance
   }
 }

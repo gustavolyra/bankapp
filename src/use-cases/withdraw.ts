@@ -20,7 +20,7 @@ export class WithdrawUseCase {
 
     if (!accountOrigin) throw new AccountNotFoundError()
 
-    if (accountOrigin.balance < amount) throw new InsufficientFundsError()
+    if (accountOrigin.balance < amount) throw new InsufficientFundsError(accountOrigin.balance)
 
     const account = await this.accountRepository.withdraw({ account_id, amount })
 
