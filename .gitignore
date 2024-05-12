@@ -1,3 +1,11 @@
+# Dependencies
 node_modules
+
+# Enviroment
 .env
+
+# DataBase
 data
+
+# Build
+dist
