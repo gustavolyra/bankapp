@@ -18,6 +18,6 @@ export async function balance(request: FastifyRequest, reply: FastifyReply) {
     return reply.status(200).send(account.balance)
   } catch (err) {
     if (err instanceof (AccountNotFoundError))
-      return reply.status(404).send(err)
+      return reply.status(404).send(0)
   }
 }

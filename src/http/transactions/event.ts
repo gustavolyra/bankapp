@@ -17,7 +17,6 @@ export async function event(request: FastifyRequest, reply: FastifyReply) {
   })
 
   const { type, amount, destination, origin } = eventSchemaBody.parse(request.body)
-  console.log(type)
   switch (type) {
     case "deposit":
       if (!destination) return reply.status(400).send({ error: "Destination is required for deposit event" })

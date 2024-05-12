@@ -1,5 +1,5 @@
 import { Prisma, account } from "@prisma/client";
-import { AccountRepository, depositRequest, transferRequest, withdrawRequest } from "../account";
+import { AccountRepository, depositRequest, transferReply, transferRequest, withdrawRequest } from "../account";
 import { randomInt } from "crypto";
 
 export class InMemoryAccountRepository implements AccountRepository {
@@ -9,8 +9,7 @@ export class InMemoryAccountRepository implements AccountRepository {
     this.items = []
   }
 
-  async create(data: Prisma.accountCreateInput) {
-    const { id, balance } = data
+  async create({ id, balance }: Prisma.accountCreateInput) {
     const account = {
       id,
       balance: balance ?? 0
@@ -19,19 +18,6 @@ export class InMemoryAccountRepository implements AccountRepository {
 
     return account
   }
-
-
-  // async create(data: Prisma.accountCreateInput) {
-  //   const account = {
-  //     id: data.id ?? randomInt(100).toString(),
-  //     balance: data.balance
-  //   }
-
-  //   this.items.push(account)
-
-  //   return account
-  // }
-
 
   async doesAccountExist(account_id: string): Promise<boolean> {
     const account = this.items.find((item) => item.id === account_id)
@@ -67,30 +53,29 @@ export class InMemoryAccountRepository implements AccountRepository {
     return this.items[accountIndex]
   }
 
-  //TODO Improve
-  async transfer({ account_id_destination, account_id_origin, amount }: transferRequest) {
-    const accountOriginIndex = this.items.findIndex((item) => item.id === account_id_origin)
-    const accountDestinationIndex = this.items.findIndex((item) => item.id === account_id_destination)
+  async transfer({ account_id_destination, account_id_origin, amount }: transferRequest): Promise<transferReply | null> {
+    const accountOrigin = await this.getAccount(account_id_origin)
+    const accountDestination = await this.getAccount(account_id_destination)
 
-    if (accountDestinationIndex >= 0 && accountOriginIndex >= 0) {
-      const accountOriginBalance = this.items[accountOriginIndex].balance
-      const accountDestinationBalance = this.items[accountOriginIndex].balance
-      if (accountOriginBalance >= amount) {
-        this.items[accountOriginIndex].balance = accountOriginBalance - amount
-        this.items[accountDestinationIndex].balance = accountDestinationBalance - amount
+    if (!accountOrigin) return null
 
-        return {
-          origin: {
-            id: account_id_origin,
-            balance: this.items[accountOriginIndex].balance
-          },
-          destination: {
-            id: account_id_destination,
-            balance: this.items[accountDestinationIndex].balance
-          }
+    const origin = await this.withdraw({ account_id: account_id_origin, amount })
+
+    if (!accountDestination) {
+      this.create({ id: account_id_destination, balance: amount })
+      return {
+        origin,
+        destination: {
+          id: account_id_destination,
+          balance: amount
         }
       }
+    } else {
+      const destination = await this.deposit({ account_id: account_id_destination, amount })
+      return {
+        origin,
+        destination
+      }
     }
-    return null
   }
 }

@@ -61,10 +61,9 @@ export class PrismaAccountRepository implements AccountRepository {
     return account
   }
 
-  //TODO refactor
   async transfer({ account_id_origin, account_id_destination, amount }: transferRequest): Promise<transferReply | null> {
     const accountOrigin = await this.withdraw({ account_id: account_id_origin, amount })
-    const accountDestination = await this.withdraw({ account_id: account_id_destination, amount })
+    const accountDestination = await this.deposit({ account_id: account_id_destination, amount })
 
     return { origin: accountOrigin, destination: accountDestination }
   }
