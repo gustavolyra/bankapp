@@ -8,7 +8,7 @@ https://ipkiss.pragmazero.com
 # How to run
  1- Dowload the repository
  
- 2- start node
+ 2- Start node
  ```
  npm install
  ```
@@ -22,11 +22,11 @@ docker-compouse up -d
   DATABASE_URL="database_url" 
 ```
 
-5-Migrations
+5- Migrations
  ```
 npx prisma migrate dev
  ```
-6-start the application
+6- Start the application
 ```
 npm run start:watch
 ```
@@ -134,4 +134,6 @@ Returns:
 ----------------------------------------------------
 ## Automated Test Results
 
+![alt text](https://github.com/gustavolyra/bankapp/blob/main/images/test_config.PNG)
+![alt text](https://github.com/gustavolyra/bankapp/blob/main/images/test_results.PNG)
 
